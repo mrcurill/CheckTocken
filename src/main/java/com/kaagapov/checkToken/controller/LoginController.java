@@ -1,8 +1,12 @@
 package com.kaagapov.checkToken.controller;
 
 import com.kaagapov.checkToken.Authentication;
+import com.kaagapov.checkToken.entity.Product;
 import com.kaagapov.checkToken.entity.User;
 import com.kaagapov.checkToken.pojo.Login;
+import com.kaagapov.checkToken.repo.ProductItemRepository;
+import com.kaagapov.checkToken.repo.ProductRepository;
+import com.kaagapov.checkToken.repo.UserRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +29,12 @@ public class LoginController {
 
     @Autowired
     Authentication authentication;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    ProductRepository productRepository;
+    @Autowired
+    ProductItemRepository productItemRepository;
 
     String loginFormPath = "./src/main/resources/templates/login.html";
     String loginFormHtml = new String(Files.readAllBytes(Paths.get(loginFormPath)));
@@ -34,7 +44,7 @@ public class LoginController {
 
     @RequestMapping(value = "/login", method = RequestMethod.OPTIONS)
     public ResponseEntity options() {
-        log.info("OPTIONS /login called");
+        log.info("LOG OPTIONS : ------------------------------------------------------------------");
         return ResponseEntity.ok()
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
@@ -45,7 +55,7 @@ public class LoginController {
     @GetMapping("/")
     @ResponseBody
     public ResponseEntity getLoginFormController(){
-        log.info("LOG LOGIN_FORM: Invocked");
+        log.info("LOG LOGIN FORM : ---------------------------------------------------------------");
         return new ResponseEntity(loginFormHtml, HttpStatus.OK);
     }
 
@@ -54,7 +64,7 @@ public class LoginController {
     public ResponseEntity getLoginController(String username, String password){
         ResponseEntity<String> responseEntity;
 
-        log.info("LOG GET LOGIN : Invoked");
+        log.info("LOG GET LOGIN : ----------------------------------------------------------------");
         log.info("LOG GET LOGIN : username: ".concat(username));
         log.info("LOG GET LOGIN : password: ".concat(password));
 
@@ -71,15 +81,17 @@ public class LoginController {
     @PostMapping("/login")
     @ResponseBody
     public ResponseEntity postLoginController(@RequestBody Login login){
-        ResponseEntity<String> responseEntity;
+        ResponseEntity<Product> responseEntity;
 
-        log.info("LOG POST LOGIN : Invoked");
+        log.info("LOG POST LOGIN : ---------------------------------------------------------------");
         log.info("LOG POST LOGIN : username: ".concat(login.getLogin()));
         log.info("LOG POST LOGIN : password: ".concat(login.getPassword()));
 
         if( authentication.checkAuth(login.getLogin()) ) {
             responseEntity = new ResponseEntity("Success login", HttpStatus.OK);
-            log.info("LOG LOGIN : success login"); }
+            log.info("LOG LOGIN : success login");
+
+        }
         else {
             responseEntity = new ResponseEntity("Access denied", HttpStatus.UNAUTHORIZED);
             log.info("LOG LOGIN : failed login");
@@ -88,32 +100,52 @@ public class LoginController {
         return responseEntity;
     }
 
-//    @PostMapping
-//    @ResponseBody
-//    public ResponseEntity postCreateLoginController(@RequestBody Login login) {
-//        ResponseEntity<String> responseEntity;
-//
-//        log.info("LOG CREATE LOGIN : Invoked");
-//        log.info("LOG CREATE LOGIN : username: ".concat(login.getLogin()));
-//        log.info("LOG CREATE LOGIN : Invoked".concat(login.getPassword()));
-//
-//        responseEntity = new ResponseEntity("Success Create User", HttpStatus.OK);
-//
-//        //return responseEntity;
-//        return ResponseEntity.ok().
-//                header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS").build();
-//    }
-
-    @PostMapping("/login2")
+    @PostMapping("/users")
     @ResponseBody
-    public ResponseEntity postLoginController2(){
+    public ResponseEntity postCreateLoginController() {
+        ResponseEntity<Iterable<User>> responseEntity;
 
-        log.info("LOG POST LOGIN 2 : Invoked");
+        log.info("LOG USERS : --------------------------------------------------------------------");
 
-        return ResponseEntity.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With")
-                .build();
+        Iterable<User> users = userRepository.findAll();
+
+        log.info("LOG USERS : Returned Users:");
+        for(User user : users){
+            log.info("LOG USERS : ".concat(user.toString()));
+        }
+
+
+
+        responseEntity = new ResponseEntity(users, HttpStatus.OK);
+
+        return responseEntity;
     }
+
+
+    @PostMapping("/createuser")
+    @ResponseBody
+    public ResponseEntity postCreateLoginController(@RequestBody User user) {
+        ResponseEntity<String> responseEntity = new ResponseEntity("Success Create User", HttpStatus.OK);
+
+        log.info("LOG CREATE LOGIN : -------------------------------------------------------------");
+        log.info("LOG CREATE LOGIN : create user : ".concat(user.getLogin()));
+
+        userRepository.save(user);
+
+        return responseEntity;
+    }
+
+//    @PostMapping("/login2")
+//    @ResponseBody
+//    public ResponseEntity postLoginController2(){
+//
+//        log.info("LOG POST LOGIN 2 : -------------------------------------------------------------");
+//        log.info("LOG POST LOGIN 2 : Invoked");
+//
+//        return ResponseEntity.ok()
+//                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+//                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With")
+//                .build();
+//    }
 }

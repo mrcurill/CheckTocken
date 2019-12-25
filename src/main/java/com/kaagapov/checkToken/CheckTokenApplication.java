@@ -10,9 +10,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.List;
-import java.util.Optional;
-
 @SpringBootApplication
 public class CheckTokenApplication {
 
@@ -23,7 +20,7 @@ public class CheckTokenApplication {
 		ProductRepository productRepository = context.getBean(ProductRepository.class);
 		ProductItemRepository productItemRepository = context.getBean(ProductItemRepository.class);
 //
-//		userRepository.save(new User("SADMIN", "SADMIN"));
+//		userRepository.save(new User("SADMIN", "SADMIN", 1));
 //		userRepository.save(new User("USER1","USER1"));
 //		userRepository.save(new User("USER2","USER2"));
 //		userRepository.save(new User("USER3","USER3"));
