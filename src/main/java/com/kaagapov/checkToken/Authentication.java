@@ -22,15 +22,15 @@ public class Authentication {
         authLogRepository.save(new AuthLog(login, new Date(), resultAuth));
     }
 
-    public Boolean checkAuth(String login) {
+    public Boolean checkAuth(User user) {
 
         Boolean result = true;
 
-        List<User> users = userRepository.findByLogin(login);
-        if( users.isEmpty())
+        List<User> users = userRepository.findByLogin(user.getLogin());
+        if( users.isEmpty() || !users.get(0).getPassword().equals(user.getPassword()) )
             result = false;
 
-        logAuth(login, result);
+        logAuth(user.getLogin(), result);
 
         return result;
     }
