@@ -16,7 +16,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-//TODO время сесси
+//TODO spring session/spring security
+//TODO напихать в базу говнеца
+//TODO поверх него CRUD
+//TODO модель DAO на request/response GET attribute request (вход: login),
+//TODO mapstruct маппинг объектов
+//TODO транзакционность
+
+
 
 @RestController
 @Log

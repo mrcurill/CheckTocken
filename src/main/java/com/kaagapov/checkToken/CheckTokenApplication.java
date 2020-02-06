@@ -17,9 +17,10 @@ public class CheckTokenApplication {
 
 	public static void main(String[] args) {
 
-		ConfigurableApplicationContext context = SpringApplication.run(CheckTokenApplication.class, args);
-		UserRepository userRepository = context.getBean(UserRepository.class);
-		ComponentRepository componentRepository = context.getBean(ComponentRepository.class);
+//		ConfigurableApplicationContext context =
+				SpringApplication.run(CheckTokenApplication.class, args);
+//		UserRepository userRepository = context.getBean(UserRepository.class);
+//		ComponentRepository componentRepository = context.getBean(ComponentRepository.class);
 
 //		Iterable<User> users = userRepository.findAll();
 //		System.out.println();
