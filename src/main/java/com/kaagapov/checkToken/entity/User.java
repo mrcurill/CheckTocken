@@ -19,4 +19,5 @@ public class User{
     private List<String> roles;
     @ElementCollection
     private List<String> components;
+    
 }
