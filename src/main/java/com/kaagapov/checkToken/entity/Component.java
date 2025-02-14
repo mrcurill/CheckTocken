@@ -22,4 +22,5 @@ public class Component {
     private List<String> buttons;
     @ElementCollection(targetClass = String.class)
     private List<String> inputs;
+    
 }
